@@ -2,38 +2,63 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>@ViewBag.Title - SLot Demo</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
-            </div>
+    <div class="mobile-frame">
+        <nav class="navbar navbar-light bg-light border-bottom">
+            <span class="navbar-brand mb-0 h1">SLot</span>
+            @if (ViewBag.Title == "Home")
+            {
+                <button class="btn btn-primary" id="btnBookNow">Đặt ngay</button>
+            }
+        </nav>
+
+        <div class="main-content">
+            @RenderBody()
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+
+        <nav class="navbar navbar-light bg-light border-top fixed-bottom-nav">
+            <a class="nav-item nav-link d-flex flex-column align-items-center @(ViewBag.Title == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">
+                <i class="bi bi-house"></i>
+                <span class="nav-label">Home</span>
+            </a>
+            <a class="nav-item nav-link d-flex flex-column align-items-center @(ViewBag.Title == "Booking" ? "active" : "")" href="@Url.Action("Booking", "Home")">
+                <i class="bi bi-calendar-check"></i>
+                <span class="nav-label">Đặt chỗ</span>
+            </a>
+            <a class="nav-item nav-link d-flex flex-column align-items-center" href="@Url.Action("History", "Home")">
+                <i class="bi bi-clock-history"></i>
+                <span class="nav-label">History</span>
+            </a>
+            <a class="nav-item nav-link d-flex flex-column align-items-center position-relative" href="@Url.Action("Notifications", "Home")">
+                <i class="bi bi-bell"></i>
+                @if (TempData["NotificationCount"] != null)
+                {
+                    <span class="badge badge-danger notification-badge">@TempData["NotificationCount"]</span>
+                }
+                <span class="nav-label">Thông báo</span>
+            </a>
+            <a class="nav-item nav-link d-flex flex-column align-items-center @(ViewBag.Title == "Profile" ? "active" : "")" href="@Url.Action("Profile", "Home")">
+                <i class="bi bi-person"></i>
+                <span class="nav-label">Profile</span>
+            </a>
+        </nav>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

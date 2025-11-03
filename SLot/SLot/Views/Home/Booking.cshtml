@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Booking";
+    var parkingSlots = ViewBag.ParkingSlots as List<SLot.Models.ParkingSlotViewModel>;
+}
+
+<div id="mapBooking"></div>
+
+<div class="modal fade" id="timeBookingModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("PlaceBooking", "Home", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <h5 class="modal-title">Đặt chỗ trước</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn đang đặt chỗ cho: <strong id="slotName"></strong></p>
+                    <div class="form-group">
+                        <label for="bookingTime">Vui lòng chọn thời gian:</label>
+                        <input type="datetime-local" class="form-control" id="bookingTime" name="bookingTime" required> [cite: 12]
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận đặt</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+    $(document).ready(function () {
+        // Khởi tạo bản đồ, zoom rộng hơn để thấy các bãi
+        const map = L.map('mapBooking').setView([10.775, 106.700], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Lấy dữ liệu bãi xe từ ViewBag
+        const slots = @Html.Raw(Json.Encode(parkingSlots));
+
+        // Thêm marker cho từng bãi đỗ [cite: 10]
+        slots.forEach(slot => {
+            L.marker([slot.Latitude, slot.Longitude]).addTo(map)
+                .bindPopup(`
+                    <b>${slot.Name}</b><br>
+                    ${slot.Address}<br>
+                    Giá: ${slot.Price.toLocaleString('vi-VN')} VNĐ<br>
+                    <button class="btn btn-primary btn-sm mt-2 btn-book-slot"
+                            data-name="${slot.Name}"
+                            data-id="${slot.Id}">
+                        Đặt bãi này
+                    </button>
+                `); // [cite: 11]
+        });
+
+        // Xử lý khi nhấn nút "Đặt bãi này" trong popup của marker [cite: 12]
+        $(document).on('click', '.btn-book-slot', function (e) {
+            // Ngăn popup của Leaflet đóng lại
+            e.stopPropagation();
+
+            const slotName = $(this).data('name');
+            $('#slotName').text(slotName);
+
+            // Hiển thị modal nhập thời gian
+            $('#timeBookingModal').modal('show');
+        });
+    });
+    </script>
+}

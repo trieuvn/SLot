@@ -18,3 +18,86 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/* ---- Thêm CSS cho Demo Mobile ---- */
+
+body {
+    background-color: #f0f2f5; /* Màu nền xám nhạt bên ngoài điện thoại */
+}
+
+/* Khung giả lập điện thoại  */
+.mobile-frame {
+    max-width: 450px; /* Chiều rộng tối đa của màn hình mobile */
+    min-width: 320px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden; /* Quan trọng để bo góc nội dung */
+    /* Thiết lập chiều cao để cố định bottom-nav */
+    height: 90vh; /* Chiều cao 90% màn hình */
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Khu vực nội dung chính (giữa top và bottom nav) */
+.main-content {
+    flex-grow: 1; /* Làm cho nội dung chiếm hết không gian còn lại */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+    position: relative; /* Cần cho bản đồ và các lớp phủ */
+}
+
+/* Cố định bottom navigation  */
+.fixed-bottom-nav {
+    position: relative; /* Không 'fixed' vì nó đã nằm trong .mobile-frame */
+    width: 100%;
+    flex-shrink: 0; /* Không co lại */
+    display: flex;
+    justify-content: space-around;
+}
+
+    .fixed-bottom-nav .nav-item {
+        flex-grow: 1;
+        text-align: center;
+        padding: 8px 0;
+        color: #6c757d;
+        text-decoration: none;
+    }
+
+        .fixed-bottom-nav .nav-item .nav-label {
+            font-size: 0.75rem; /* Chữ nhỏ */
+        }
+
+        .fixed-bottom-nav .nav-item.active {
+            color: #007bff; /* Màu active */
+        }
+
+/* Style cho icon thông báo +1 [cite: 13] */
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 0.6rem;
+    padding: 2px 4px;
+}
+
+
+/* Cấu hình cho bản đồ (quan trọng) */
+#map, #mapBooking {
+    height: 100%; /* Chiếm hết chiều cao của .main-content */
+    width: 100%;
+}
+
+/* CSS cho modal loading [cite: 6] */
+#loadingModal .modal-content {
+    background: transparent;
+    border: none;
+    color: white;
+}
+
+#loadingModal .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
