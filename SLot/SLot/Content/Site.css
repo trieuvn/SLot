@@ -22,24 +22,23 @@ textarea {
 /* ---- Thêm CSS cho Demo Mobile ---- */
 
 body {
-    background-color: #f0f2f5; /* Màu nền xám nhạt bên ngoài điện thoại */
+    margin: 0;
+    padding: 0;
 }
 
 /* Khung giả lập điện thoại  */
 .mobile-frame {
-    max-width: 450px; /* Chiều rộng tối đa của màn hình mobile */
-    min-width: 320px;
-    margin: 20px auto;
-    border: 1px solid #ccc;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    overflow: hidden; /* Quan trọng để bo góc nội dung */
-    /* Thiết lập chiều cao để cố định bottom-nav */
-    height: 90vh; /* Chiều cao 90% màn hình */
-    min-height: 600px;
+    /* Đặt kích thước và vị trí tuyệt đối */
+    height: 100vh; /* Chiếm 100% chiều cao màn hình */
+    width: 100%; /* Chiếm 100% chiều rộng */
+    margin: 0; /* Xóa margin */
+    border: none; /* Xóa border */
+    box-shadow: none; /* Xóa bóng */
+    border-radius: 0; /* Xóa bo góc */
+    /* Vẫn giữ cấu trúc flex-box */
     display: flex;
     flex-direction: column;
+    background-color: #ffffff; /* Nền trắng */
 }
 
 /* Khu vực nội dung chính (giữa top và bottom nav) */
@@ -254,3 +253,24 @@ body {
         font-size: 0.65rem;
         padding: 2px 5px;
     }
+
+/* ---- 2. Thêm CSS cho nút "Tìm vị trí" ---- */
+.location-fab {
+    position: absolute;
+    bottom: 20px; /* Vị trí giống FAB "Đặt ngay" */
+    left: 20px; /* Nhưng ở bên trái */
+    z-index: 999;
+    border-radius: 50%; /* Nút tròn */
+    width: 56px;
+    height: 56px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-size: 1.5rem; /* Icon lớn hơn */
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* Nền trắng */
+    color: #007bff; /* Icon màu xanh (cho nổi bật) */
+    border: 1px solid #ddd;
+}

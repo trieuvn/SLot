@@ -145,6 +145,11 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\img\bai1.jpg" />
+    <Content Include="Content\img\bai2.jpg" />
+    <Content Include="Content\img\bai3.jpg" />
+    <Content Include="Content\img\bai4.jpg" />
+    <Content Include="Content\img\bai5.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

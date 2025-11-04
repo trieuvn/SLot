@@ -28,30 +28,60 @@ namespace SLot.Controllers
                 new ParkingSlotViewModel
                 {
                     Id = 1,
-                    Name = "Bãi xe trung tâm A",
-                    Address = "123 Đường Lê Lợi, Q.1, TP.HCM",
+                    Name = "Bãi Xe 220 Pasteur",
+                    Address = "220 Pasteur, Phường 6, Quận 3, Thành phố Hồ Chí Minh",
                     Price = 50000,
-                    ImageUrl = "https://via.placeholder.com/100", // Link ảnh demo
-                    Latitude = 10.7769, // Vị trí gán cứng
-                    Longitude = 106.7009
+                    ImageUrl = "/Content/img/bai1.jpg", // Link ảnh demo
+                    Latitude = 10.784533855868323, // Vị trí gán cứng
+                    Longitude = 106.69249728774506
                 },
                 new ParkingSlotViewModel
                 {
                     Id = 2,
-                    Name = "Bãi xe chợ Bến Thành",
-                    Address = "456 Đường Phan Chu Trinh, Q.1, TP.HCM",
+                    Name = "Bãi giữ xe ô tô 76",
+                    Address = "76 Trần Quốc Thảo, Phường Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh",
                     Price = 70000,
-                    ImageUrl = "https://via.placeholder.com/100", // Link ảnh demo
-                    Latitude = 10.7725, // Vị trí gán cứng
-                    Longitude = 106.6980
+                    ImageUrl = "/Content/img/bai2.jpg", // Link ảnh demo
+                    Latitude = 10.784174480006596, // Vị trí gán cứng
+                    Longitude = 106.68589315581875
+                },
+                new ParkingSlotViewModel
+                {
+                    Id = 3,
+                    Name = "P BÃI XE BV DA LIỄU",
+                    Address = "2 Nguyễn Thông, Phường 6, Quận 3, Thành phố Hồ Chí Minh 700000",
+                    Price = 60000,
+                    ImageUrl = "/Content/img/bai3.jpg", // Link ảnh demo
+                    Latitude = 10.77717206540885, // Vị trí gán cứng
+                    Longitude = 106.68691277775554
+                },
+                new ParkingSlotViewModel
+                {
+                    Id = 4,
+                    Name = "Bãi Giữ Xe 24/24",
+                    Address = "62 Trần Quốc Thảo, Phường Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh",
+                    Price = 65000,
+                    ImageUrl = "/Content/img/bai4.jpg", // Link ảnh demo
+                    Latitude = 10.78244706269457, // Vị trí gán cứng
+                    Longitude = 106.68756863686946
+                },
+                new ParkingSlotViewModel
+                {
+                    Id = 5,
+                    Name = "Giữ Xe Ô-Tô",
+                    Address = "17 Lê Quý Đôn, Phường 6, Quận 3, Thành phố Hồ Chí Minh",
+                    Price = 70000,
+                    ImageUrl = "/Content/img/bai5.jpg", // Link ảnh demo
+                    Latitude = 10.781119093590915, // Vị trí gán cứng
+                    Longitude = 106.69119498352262
                 }
             };
         }
 
         public ActionResult Index()
         {
-            ViewBag.CurrentLocationLat = 10.7756; // Vị trí hiện tại gán cứng [cite: 4, 8]
-            ViewBag.CurrentLocationLng = 106.7019;
+            ViewBag.CurrentLocationLat = 10.780911421802788; 
+            ViewBag.CurrentLocationLng = 106.68575690823123;
             return View();
         }
 
