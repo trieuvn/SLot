@@ -17,12 +17,24 @@
 </head>
 <body>
     <div class="mobile-frame">
+
         <nav class="navbar navbar-light bg-light border-bottom">
-            <span class="navbar-brand mb-0 h1">SLot</span>
-            @if (ViewBag.Title == "Home")
-            {
-                <button class="btn btn-primary" id="btnBookNow">Đặt ngay</button>
-            }
+            <div class="top-nav-profile">
+                <i class="bi bi-person-circle avatar"></i>
+
+                <div class="user-info">
+                    <span class="welcome-text">Xin chào,</span>
+                    <p class="user-name">Demo User</p>
+                </div>
+            </div>
+
+            <a class="notification-bell" href="@Url.Action("Notifications", "Home")">
+                <i class="bi bi-bell"></i>
+                @if (TempData["NotificationCount"] != null)
+                {
+                    <span class="badge badge-danger notification-badge">@TempData["NotificationCount"]</span>
+                }
+            </a>
         </nav>
 
         <div class="main-content">
@@ -41,14 +53,6 @@
             <a class="nav-item nav-link d-flex flex-column align-items-center" href="@Url.Action("History", "Home")">
                 <i class="bi bi-clock-history"></i>
                 <span class="nav-label">History</span>
-            </a>
-            <a class="nav-item nav-link d-flex flex-column align-items-center position-relative" href="@Url.Action("Notifications", "Home")">
-                <i class="bi bi-bell"></i>
-                @if (TempData["NotificationCount"] != null)
-                {
-                    <span class="badge badge-danger notification-badge">@TempData["NotificationCount"]</span>
-                }
-                <span class="nav-label">Thông báo</span>
             </a>
             <a class="nav-item nav-link d-flex flex-column align-items-center @(ViewBag.Title == "Profile" ? "active" : "")" href="@Url.Action("Profile", "Home")">
                 <i class="bi bi-person"></i>

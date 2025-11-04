@@ -20,7 +20,7 @@
                     <p>Bạn đang đặt chỗ cho: <strong id="slotName"></strong></p>
                     <div class="form-group">
                         <label for="bookingTime">Vui lòng chọn thời gian:</label>
-                        <input type="datetime-local" class="form-control" id="bookingTime" name="bookingTime" required> [cite: 12]
+                        <input type="datetime-local" class="form-control" id="bookingTime" name="bookingTime" required> 
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -43,7 +43,6 @@
         // Lấy dữ liệu bãi xe từ ViewBag
         const slots = @Html.Raw(Json.Encode(parkingSlots));
 
-        // Thêm marker cho từng bãi đỗ [cite: 10]
         slots.forEach(slot => {
             L.marker([slot.Latitude, slot.Longitude]).addTo(map)
                 .bindPopup(`
@@ -55,10 +54,9 @@
                             data-id="${slot.Id}">
                         Đặt bãi này
                     </button>
-                `); // [cite: 11]
+                `);
         });
 
-        // Xử lý khi nhấn nút "Đặt bãi này" trong popup của marker [cite: 12]
         $(document).on('click', '.btn-book-slot', function (e) {
             // Ngăn popup của Leaflet đóng lại
             e.stopPropagation();

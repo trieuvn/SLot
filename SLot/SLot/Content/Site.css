@@ -101,3 +101,156 @@ body {
     width: 3rem;
     height: 3rem;
 }
+
+/* ---- NÂNG CẤP GIAO DIỆN (THEO YÊU CẦU MỚI) ---- */
+
+/* 1. Phối màu chính (Vàng/Đen/Trắng) */
+:root {
+    --primary-color: #FFC107; /* Màu vàng (Bootstrap Warning) */
+    --dark-color: #212529; /* Màu đen/tối */
+    --light-color: #ffffff; /* Màu trắng */
+}
+
+/* Áp dụng màu cho Navbar */
+.navbar {
+    background-color: var(--light-color) !important;
+}
+
+.navbar-brand, .nav-item .nav-label, .user-info .user-name {
+    color: var(--dark-color) !important;
+}
+
+/* Áp dụng màu cho Bottom Nav (Active) */
+.fixed-bottom-nav .nav-item.active {
+    color: var(--primary-color); /* Màu vàng cho item active */
+}
+
+/* Áp dụng màu cho Nút chính */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--dark-color); /* Chữ đen trên nền vàng */
+    font-weight: 600;
+}
+
+    .btn-primary:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+        color: var(--dark-color);
+    }
+
+
+/* 2. Sửa Bottom Nav */
+/* NOTE: Cấu trúc flex-box trong file _Layout cũ đã đúng. 
+   .mobile-frame (flex-column)
+   .main-content (flex-grow: 1, overflow: auto)
+   .fixed-bottom-nav (flex-shrink: 0)
+   -> Cấu trúc này đã đảm bảo nav luôn ở dưới cùng của .mobile-frame. 
+   Yêu cầu mới  về card-popup sẽ được đặt 'absolute' bên trên.
+*/
+.main-content {
+    position: relative; /* Đã có, nhưng đảm bảo là có để định vị carousel */
+}
+
+
+/* 3. Nút "Đặt ngay" (FAB - Floating Action Button) */
+/* Nút này sẽ thay thế nút "Đặt ngay" trên top-nav cũ */
+.fab-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999; /* Nằm trên bản đồ, dưới carousel */
+    border-radius: 50px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+
+/* 4. Carousel Card (Popup lướt ngang)  */
+#parkingListCarouselContainer {
+    position: absolute;
+    bottom: 0; /* Nằm ngay trên bottom nav */
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Nằm trên cùng */
+    background: linear-gradient(to top, rgba(255,255,255,0.9), rgba(255,255,255,0.7)); /* Nền mờ */
+    padding-top: 10px;
+    padding-bottom: 10px; /* Khoảng cách với bottom nav */
+}
+
+.horizontal-scroll-wrapper {
+    overflow-x: auto; /* Cho phép lướt ngang */
+    white-space: nowrap; /* Giữ các card trên 1 hàng */
+    padding-left: 10px; /* Đệm bên trái */
+    /* Bật tính năng "snap" khi lướt */
+    scroll-snap-type: x mandatory;
+}
+
+    .horizontal-scroll-wrapper .parking-card {
+        display: inline-block; /* Xếp các card theo chiều ngang */
+        width: 80%; /* Mỗi card rộng 80% màn hình */
+        margin-right: 10px;
+        white-space: normal; /* Cho phép nội dung card xuống dòng */
+        vertical-align: top;
+        scroll-snap-align: start; /* "Snap" card vào vị trí đầu */
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: var(--light-color);
+    }
+
+.parking-card .card-body {
+    padding: 1rem;
+}
+
+.parking-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.parking-card .card-text {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 5. Top Nav mới (cho Avatar & Thông báo)  */
+.top-nav-profile {
+    display: flex;
+    align-items: center;
+}
+
+    .top-nav-profile .avatar {
+        font-size: 2rem; /* Dùng icon tạm thời */
+        color: #6c757d;
+        margin-right: 10px;
+    }
+
+.user-info .user-name {
+    font-size: 1rem;
+    font-weight: 600;
+    display: block;
+    margin: 0;
+}
+
+.user-info .welcome-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+    display: block;
+    margin: 0;
+}
+
+.notification-bell {
+    font-size: 1.5rem;
+    color: var(--dark-color);
+    position: relative;
+    margin-left: auto; /* Đẩy chuông về bên phải */
+    padding-right: 10px;
+}
+
+    .notification-bell .notification-badge {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+        font-size: 0.65rem;
+        padding: 2px 5px;
+    }
