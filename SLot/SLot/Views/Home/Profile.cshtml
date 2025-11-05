@@ -16,7 +16,9 @@
                 <p class="mb-0 text-muted">Số dư tài khoản</p>
                 <h5 class="mb-0">@Model.Balance.ToString("N0") VNĐ</h5>
             </div>
-            <i class="bi bi-wallet2" style="font-size: 24px;"></i>
+            <a href="@Url.Action("Wallet", "Home")" class="text-decoration-none">
+                <i class="bi bi-wallet2" style="font-size: 24px;"></i>
+            </a>
         </div>
     </div>
 

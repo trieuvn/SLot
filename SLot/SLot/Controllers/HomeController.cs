@@ -105,11 +105,29 @@ namespace SLot.Controllers
              ViewBag.Message = "Tính năng đang được tạm khóa trong quá trình demo"; 
             return View();
         }
+        // Trong HomeController.cs
+        public ActionResult Wallet()
+        {
+            var model = new WalletViewModel
+            {
+                Balance = 50000,
+                Transactions = new List<Transaction>
+        {
+            new Transaction
+            {
+                Type = "Nạp tiền vào Ví",
+                Amount = 50000,
+                DateTime = "16:24 - 15/08/2023",
+            }
+        }
+            };
+            return View(model);
+        }
 
         // Dẫn đến view khóa 
         public ActionResult History()
         {
-            return RedirectToAction("LockedFeature");
+            return View();
         }
 
         // (Tính năng chuông thông báo cũng dẫn đến view khóa) 
@@ -156,5 +174,6 @@ namespace SLot.Controllers
             ViewBag.Message = "Your contact page.";
             return View();
         }
+        
     }
 }
