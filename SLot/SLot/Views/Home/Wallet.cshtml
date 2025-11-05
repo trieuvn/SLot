@@ -41,26 +41,37 @@
         }
 
     .balance-card {
-        background: linear-gradient(135deg, #1e3a8a, #1e40af);
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.25), transparent 60%), /* ánh sáng mờ góc trên */
+        linear-gradient(135deg, #003C88 0%, #0072CC 100%); 
+
         color: white;
         padding: 30px 20px;
-        border-radius: 16px;
+        border-radius: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        height: 120px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        height: 300px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
+        .balance-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+
     .balance-amount {
-        font-size: 36px;
+        font-size: 70px;
         font-weight: 700;
         margin: 0;
-        margin-top: 30px;
+        margin-top: 65px;
+        margin-left: 40px;
     }
 
     .balance-label {
-        font-size: 16px;
+        font-size: 30px;
         opacity: 0.9;
-        margin-top: 4px;
+        margin-top: 10px;
+        margin-left:40px;
     }
 
     .action-buttons {
