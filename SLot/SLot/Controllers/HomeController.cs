@@ -197,6 +197,25 @@ namespace SLot.Controllers
             ViewBag.Message = "Your contact page.";
             return View();
         }
-        
+        public ActionResult UserProfile()
+        {
+            var user = GetDemoUser();
+            return View(user);
+        }
+        [HttpPost]
+        public ActionResult UpdateProfile(UserProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+               
+                var user = GetDemoUser();
+                model.Balance = user.Balance;
+
+                ViewBag.Message = "Cập nhật thông tin thành công!";
+            }
+
+            return View("UserProfile", model);
+        }
+
     }
 }

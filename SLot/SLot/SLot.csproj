@@ -193,6 +193,7 @@
     <Content Include="Views\Home\History.cshtml" />
     <Content Include="Views\Home\Wallet.cshtml" />
     <Content Include="Views\Home\Language.cshtml" />
+    <Content Include="Views\Home\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
