@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
     <link href="~/Content/Site.css" rel="stylesheet" />
 
     <style>
@@ -27,61 +30,25 @@
                 color: #6c757d;
                 margin-right: 10px;
             }
-        .fixed-bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: #fff;
-            border-top: 1px solid #e0e0e0;
-            padding: 8px 0;
+
+        .fixed-bottom-nav .nav-label {
+            font-size: 0.75rem;
         }
 
-            .fixed-bottom-nav .nav-item {
-                color: #6c757d;
-                font-size: 14px;
-                text-decoration: none;
-                transition: color 0.2s ease;
-            }
-
-                .fixed-bottom-nav .nav-item i {
-                    font-size: 40px; 
-                    margin-bottom: 4px; /* khoảng cách giữa icon và chữ */
-                }
-
-                .fixed-bottom-nav .nav-item.active {
-                    color: #007bff;
-                    font-weight: 600;
-                }
-
-                    .fixed-bottom-nav .nav-item.active i {
-                        color: var(--primary-color);
-                    }
-                .fixed-bottom-nav .nav-item .nav-label {
-                    font-size:1rem;
-                }
-                /* === TOP NAV === */
-                .avatar {
-                    font-size: 40px;
-                    color: #007bff;
-                }
-        .user-info .welcome-text {
-            font-size: 1rem;
+        .fixed-bottom-nav .nav-item {
+            flex-grow: 1;
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
             color: #6c757d;
-            display: block;
-            margin: 0;
-        }
-        .user-info .user-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            display: block;
-            margin: 0;
+            text-decoration: none;
+            padding-left: 0;
+            padding-right: 0;
         }
     </style>
 </head>
-
 <body>
     <div class="mobile-frame">
-
-        <!-- Thanh trên -->
         <nav class="navbar navbar-light bg-light border-bottom">
             <div class="top-nav-profile">
                 <i class="bi bi-person-circle avatar"></i>
@@ -90,9 +57,8 @@
                     <p class="user-name">Demo User</p>
                 </div>
             </div>
-
             <a class="notification-bell" href="@Url.Action("Notifications", "Home")">
-                <i class="bi bi-bell" style="font-size: 27 px;"></i>
+                <i class="bi bi-bell"></i>
                 @if (TempData["NotificationCount"] != null)
                 {
                     <span class="badge badge-danger notification-badge">@TempData["NotificationCount"]</span>
@@ -100,12 +66,10 @@
             </a>
         </nav>
 
-        <!-- Nội dung chính -->
         <div class="main-content">
             @RenderBody()
         </div>
 
-        <!-- Thanh điều hướng dưới -->
         <nav class="navbar navbar-light border-top fixed-bottom-nav">
             <a class="nav-item nav-link d-flex flex-column align-items-center @(ViewBag.Title == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">
                 <i class="bi bi-house"></i>

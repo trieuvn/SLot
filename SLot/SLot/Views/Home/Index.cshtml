@@ -1,4 +1,5 @@
-﻿@{
+﻿@* (Toàn bộ phần HTML, bao gồm các Modal, giữ nguyên như file của bạn) *@
+@{
     ViewBag.Title = "Home";
 }
 
@@ -73,63 +74,117 @@
 </div>
 
 
+<div class="modal fade" id="predictionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dự đoán chỗ trống</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tỉ lệ có chỗ trống (dự đoán) cho <strong id="predictionSlotName"></strong>:</p>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Trong 15 phút
+                        <span class="badge badge-primary badge-pill">25%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Trong 30 phút
+                        <span class="badge badge-primary badge-pill">40%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Trong 45 phút
+                        <span class="badge badge-primary badge-pill">60%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Trong 1 tiếng
+                        <span class="badge badge-primary badge-pill">75%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Trong 2 tiếng
+                        <span class="badge badge-primary badge-pill">90%</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="futureBookingModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("PlaceBooking", "Home", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <h5 class="modal-title">Đặt chỗ trước</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn đang đặt chỗ cho: <strong id="futureSlotName"></strong></p>
+                    <div class="form-group">
+                        <label for="bookingTimeFuture">Vui lòng chọn thời gian:</label>
+                        <input type="datetime-local" class="form-control" id="bookingTimeFuture" name="bookingTime" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận đặt</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
 @section scripts {
     <script>
-    // Vị trí hiện tại (gán cứng)
+    // (Các biến toàn cục giữ nguyên)
     const currentLocation = [@ViewBag.CurrentLocationLat, @ViewBag.CurrentLocationLng];
-    // Vị trí bãi đỗ xe được chọn (sẽ được cập nhật)
-    let destinationLocation = [10.7769, 106.7009];
+    let destinationLocation = [10.784533855868323, 106.69249728774506];
 
     let map;
     let currentUserData = {};
     let parkingSlotsData = [];
     let selectedSlot = {};
     let tripTimerInterval;
-    let routePolyline;
-    let currentMarker; // Marker vị trí hiện tại
-    let destinationMarker; // Marker bãi đỗ xe
+    let routingControl = null;
+    let currentMarker;
+    let destinationMarker;
 
-    // Khởi tạo bản đồ
+    // (initMap và btnFindLocation giữ nguyên)
     function initMap() {
         map = L.map('map').setView(currentLocation, 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-
-        // KHÔNG thêm marker vị trí hiện tại khi tải trang
     }
 
-    // --- MỚI: Logic nút "Tìm vị trí" ---
     $('#btnFindLocation').on('click', function () {
-        // Giả lập kiểm tra quyền GPS [cite: 47]
-        // Sử dụng confirm() để người dùng demo có thể chọn "OK" (cho phép) hoặc "Cancel" (từ chối)
         if (confirm("SLot muốn sử dụng vị trí của bạn. Cho phép?")) {
-            // Người dùng cho phép (giả lập)
-            // Xóa marker cũ (nếu có)
-            if (currentMarker) {
-                map.removeLayer(currentMarker);
+            if (currentMarker) map.removeLayer(currentMarker);
+            if (destinationMarker) map.removeLayer(destinationMarker);
+            if (routingControl) {
+                map.removeControl(routingControl);
+                routingControl = null;
             }
 
-            // Xóa marker bãi đỗ (nếu có) để tập trung vào vị trí hiện tại
-            if (destinationMarker) {
-                map.removeLayer(destinationMarker);
-            }
-
-            // Thêm marker mới tại vị trí gán cứng [cite: 8]
             currentMarker = L.marker(currentLocation).addTo(map)
                 .bindPopup('Vị trí của bạn')
                 .openPopup();
-
-            // Di chuyển bản đồ đến vị trí
             map.panTo(currentLocation);
         } else {
-            // Người dùng từ chối
-            // Hiển thị thông báo và không di chuyển bản đồ [cite: 48]
             alert("Không thể lấy vị trí. Vui lòng cấp quyền truy cập vị trí.");
         }
     });
 
-    // --- (Logic Nút "Đặt ngay" (FAB) giữ nguyên) ---
+    // (Logic Nút "Đặt ngay" - CẬP NHẬT MÀU NÚT VÀ RESIZE MAP)
     $('#btnBookNow').on('click', function () {
         $('#loadingModal').modal('show');
         const getUser = $.get('@Url.Action("GetCurrentUserData", "Home")');
@@ -143,35 +198,58 @@
                 $('#loadingModal').modal('hide');
                 let listHtml = '';
                 parkingSlotsData.forEach(slot => {
+
+                    let buttonHtml = '';
+                    if (slot.IsFull) {
+                        // --- THAY ĐỔI 1: Đổi màu nút sang Vàng (btn-warning) ---
+                        buttonHtml = `
+                            <button class="btn btn-sm btn-secondary" disabled>Đã đầy</button>
+                            <div class="d-flex justify-content-between mt-2">
+                                <button class="btn btn-sm btn-warning btn-predict" data-id="${slot.Id}" data-name="${slot.Name}" style="font-size: 0.75rem;">
+                                    <i class="bi bi-graph-up"></i> Xem dự đoán
+                                </button>
+                                <button class="btn btn-sm btn-warning btn-book-later" data-id="${slot.Id}" data-name="${slot.Name}" style="font-size: 0.75rem;">
+                                    <i class="bi bi-clock"></i> Đặt sau
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        buttonHtml = `
+                            <button class="btn btn-sm btn-primary btn-block select-slot-btn"
+                                    data-id="${slot.Id}">Chọn bãi này</button>
+                        `;
+                    }
+
                     listHtml += `
                         <div class="card parking-card"
                              data-id="${slot.Id}"
                              data-lat="${slot.Latitude}"
                              data-lng="${slot.Longitude}">
                             <div class="card-body">
-                                <img src="${slot.ImageUrl}" class="img-fluid rounded mb-2" style="width: 100%; height: 100px; object-fit: cover;">
+                                <img src="@Url.Content("~/")_blank_${slot.ImageUrl.substring(1)}" class="img-fluid rounded mb-2" style="width: 100%; height: 100px; object-fit: cover;">
                                 <h6 class="card-title">${slot.Name}</h6>
                                 <p class="card-text small">${slot.Address}</p>
                                 <p class="card-text"><b>Giá: ${slot.Price.toLocaleString('vi-VN')} VNĐ</b></p>
-                                <button class="btn btn-sm btn-primary btn-block select-slot-btn"
-                                        data-id="${slot.Id}">Chọn bãi này</button>
+                                ${buttonHtml}
                             </div>
                         </div>
                     `;
                 });
+                listHtml = listHtml.replace(/_blank_/g, '');
+
                 $('#parkingListCarousel').html(listHtml);
                 $('#parkingListCarouselContainer').show();
 
-                // KHÔNG pan đến bãi xe đầu tiên, để bản đồ yên
+                // --- THAY ĐỔI 2: Resize bản đồ khi carousel xuất hiện ---
+                map.invalidateSize();
 
             }, 2000);
         });
     });
 
-    // --- (Logic Nút "Chọn bãi này" giữ nguyên) ---
-    // Cần e.stopPropagation() để không kích hoạt sự kiện click của .parking-card
+    // (Các logic sự kiện click .select-slot-btn, .btn-predict, .btn-book-later, .parking-card giữ nguyên)
     $(document).on('click', '.select-slot-btn', function (e) {
-        e.stopPropagation(); // QUAN TRỌNG
+        e.stopPropagation();
         const slotId = $(this).data('id');
         selectedSlot = parkingSlotsData.find(s => s.Id == slotId);
 
@@ -184,7 +262,7 @@
             <p><strong>Tài khoản:</strong> ${currentUserData.UserName}</p>
             <p><strong>Số tiền còn lại:</strong>
                 ${currentUserData.Balance.toLocaleString('vi-VN')} - ${selectedSlot.Price.toLocaleString('vi-VN')} =
-                <b>${remainingBalance.toLocaleString('vi-VN')} VNĐ</b>
+                <b>${(remainingBalance).toLocaleString('vi-VN')} VNĐ</b>
             </p>
             <p><strong>Thời gian di chuyển (dự kiến):</strong> 15 phút</p>
         `;
@@ -192,96 +270,108 @@
         $('#confirmationModal').modal('show');
     });
 
-    // --- MỚI: Logic Click-để-cuộn-ra-giữa (Thay thế cho logic scroll) ---
+    $(document).on('click', '.btn-predict', function (e) {
+        e.stopPropagation();
+        const slotName = $(this).data('name');
+        $('#predictionSlotName').text(slotName);
+        $('#predictionModal').modal('show');
+    });
+
+    $(document).on('click', '.btn-book-later', function (e) {
+        e.stopPropagation();
+        const slotName = $(this).data('name');
+        $('#futureSlotName').text(slotName);
+        $('#futureBookingModal').modal('show');
+    });
+
     $(document).on('click', '.parking-card', function () {
         const card = $(this);
         const container = $('#parkingListCarousel');
-
         const lat = card.data('lat');
         const lng = card.data('lng');
         const name = card.find('.card-title').text();
 
-        // 1. Logic cuộn card ra giữa
         const containerWidth = container.width();
         const cardWidth = card.width();
-        const cardOffsetLeft = card.position().left; // Vị trí card so với container
+        const cardOffsetLeft = card.position().left;
         const currentScrollLeft = container.scrollLeft();
-
-        // Tính toán vị trí scroll mới để card nằm giữa
         const targetScrollLeft = currentScrollLeft + cardOffsetLeft - (containerWidth / 2) + (cardWidth / 2);
 
-        // Cuộn mượt
         container.animate({ scrollLeft: targetScrollLeft }, 300);
 
-        // 2. Logic đánh dấu marker trên bản đồ
-
-        // Xóa marker vị trí hiện tại (nếu có)
-        if (currentMarker) {
-            map.removeLayer(currentMarker);
-            currentMarker = null; // Xóa tham chiếu
+        if (currentMarker) map.removeLayer(currentMarker);
+        if (destinationMarker) map.removeLayer(destinationMarker);
+        if (routingControl) {
+            map.removeControl(routingControl);
+            routingControl = null;
         }
 
-        // Xóa marker bãi đỗ cũ (nếu có)
-        if (destinationMarker) {
-            map.removeLayer(destinationMarker);
-        }
-
-        // Cập nhật vị trí đích
         destinationLocation = [lat, lng];
-
-        // Thêm marker bãi đỗ mới và mở popup
         destinationMarker = L.marker(destinationLocation).addTo(map)
             .bindPopup(name)
             .openPopup();
-
-        // 3. Di chuyển bản đồ đến marker mới
         map.panTo(destinationLocation);
     });
 
-    // --- (XÓA BỎ logic sự kiện 'scroll' và hàm handleScrollStop()) ---
-
-
-    // --- (Các logic còn lại: startTripTimer, btnCancelTrip, btnConfirmBooking, initMap, document.ready... giữ nguyên như cũ) ---
-
-    // Xóa các element trên bản đồ (đường đi, marker đích)
+    // (clearMapExtras giữ nguyên)
     function clearMapExtras() {
-        if (routePolyline) {
-            map.removeLayer(routePolyline);
-        }
         if (destinationMarker) {
             map.removeLayer(destinationMarker);
+            destinationMarker = null;
+        }
+         if (currentMarker) {
+            map.removeLayer(currentMarker);
+            currentMarker = null;
+        }
+        if (routingControl) {
+            map.removeControl(routingControl);
+            routingControl = null;
         }
         map.closePopup();
     }
 
-    // Vẽ đường đi
+    // (Hàm drawRoute - CẬP NHẬT MÀU ĐƯỜNG ĐI)
     function drawRoute() {
         clearMapExtras();
+
         destinationLocation = [selectedSlot.Latitude, selectedSlot.Longitude];
 
-        // Marker đích
-        destinationMarker = L.marker(destinationLocation).addTo(map)
-            .bindPopup(selectedSlot.Name);
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
 
-        // Marker vị trí hiện tại (chỉ khi bắt đầu chuyến)
-        if (currentMarker) map.removeLayer(currentMarker);
-        currentMarker = L.marker(currentLocation).addTo(map)
-            .bindPopup('Vị trí của bạn');
+        routingControl = L.Routing.control({
+            waypoints: [
+                L.latLng(currentLocation),
+                L.latLng(destinationLocation)
+            ],
+            routeWhileDragging: false,
+            show: false,
+            addWaypoints: false,
+            draggableWaypoints: false,
+            fitSelectedRoutes: true,
+            // --- THAY ĐỔI 3: Đổi màu đường đi sang Xanh dương ---
+            lineOptions: {
+                styles: [{ color: 'blue', opacity: 0.8, weight: 6 }]
+            },
+            createMarker: function() { return null; }
+        }).addTo(map);
 
-        // Đường đi
-        const latlngs = [currentLocation, destinationLocation];
-        routePolyline = L.polyline(latlngs, { color: 'blue' }).addTo(map);
-
-        map.fitBounds(routePolyline.getBounds());
+        currentMarker = L.marker(currentLocation).addTo(map).bindPopup('Vị trí của bạn');
+        destinationMarker = L.marker(destinationLocation).addTo(map).bindPopup(selectedSlot.Name);
     }
 
-    // Bắt đầu đếm ngược
+    // (startTripTimer - CẬP NHẬT RESIZE MAP)
     function startTripTimer() {
         let duration = 15;
         $('#tripOverlay').show();
         $('#btnBookNow').hide();
-        $('#btnFindLocation').hide(); // Ẩn luôn nút tìm vị trí
+        $('#btnFindLocation').hide();
         $('#parkingListCarouselContainer').hide();
+
+        // --- THAY ĐỔI 4: Resize bản đồ khi overlay xuất hiện ---
+        map.invalidateSize();
 
         tripTimerInterval = setInterval(() => {
             duration--;
@@ -293,31 +383,46 @@
                 clearInterval(tripTimerInterval);
                 $('#tripOverlay').hide();
                 $('#btnBookNow').show();
-                $('#btnFindLocation').show(); // Hiện lại
+                $('#btnFindLocation').show();
                 clearMapExtras();
+                map.dragging.enable();
+                map.touchZoom.enable();
+                map.doubleClickZoom.enable();
+                map.scrollWheelZoom.enable();
+
+                // --- THAY ĐỔI 5: Resize bản đồ khi overlay ẩn đi ---
+                map.invalidateSize();
+
                 $('#refundModal').modal('show');
             }
         }, 1000);
     }
 
-    // Hủy chuyến
+    // (btnCancelTrip - CẬP NHẬT RESIZE MAP)
     $('#btnCancelTrip').on('click', function () {
         clearInterval(tripTimerInterval);
         $('#tripOverlay').hide();
         $('#btnBookNow').show();
-        $('#btnFindLocation').show(); // Hiện lại
+        $('#btnFindLocation').show();
         clearMapExtras();
+        map.dragging.enable();
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+
+        // --- THAY ĐỔI 6: Resize bản đồ khi overlay ẩn đi ---
+        map.invalidateSize();
+
         $('#refundModal').modal('show');
     });
 
-    // Xác nhận đặt
+    // (btnConfirmBooking và document.ready giữ nguyên)
     $('#btnConfirmBooking').on('click', function () {
         $('#confirmationModal').modal('hide');
         drawRoute();
         startTripTimer();
     });
 
-    // --- Khởi chạy ---
     $(document).ready(function () {
         initMap();
 
