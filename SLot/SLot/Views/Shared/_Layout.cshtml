@@ -14,14 +14,77 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <style>
+        /* === ICON NAV BOTTOM === */
+        .top-nav-profile {
+            display: flex;
+            align-items: center;
+        }
+
+            .top-nav-profile .avatar {
+                font-size: 3rem; /* Dùng icon tạm thời */
+                color: #6c757d;
+                margin-right: 10px;
+            }
+        .fixed-bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 8px 0;
+        }
+
+            .fixed-bottom-nav .nav-item {
+                color: #6c757d;
+                font-size: 14px;
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+
+                .fixed-bottom-nav .nav-item i {
+                    font-size: 40px; 
+                    margin-bottom: 4px; /* khoảng cách giữa icon và chữ */
+                }
+
+                .fixed-bottom-nav .nav-item.active {
+                    color: #007bff;
+                    font-weight: 600;
+                }
+
+                    .fixed-bottom-nav .nav-item.active i {
+                        color: var(--primary-color);
+                    }
+                .fixed-bottom-nav .nav-item .nav-label {
+                    font-size:1rem;
+                }
+                /* === TOP NAV === */
+                .avatar {
+                    font-size: 40px;
+                    color: #007bff;
+                }
+        .user-info .welcome-text {
+            font-size: 1rem;
+            color: #6c757d;
+            display: block;
+            margin: 0;
+        }
+        .user-info .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: block;
+            margin: 0;
+        }
+    </style>
 </head>
+
 <body>
     <div class="mobile-frame">
 
+        <!-- Thanh trên -->
         <nav class="navbar navbar-light bg-light border-bottom">
             <div class="top-nav-profile">
                 <i class="bi bi-person-circle avatar"></i>
-
                 <div class="user-info">
                     <span class="welcome-text">Xin chào,</span>
                     <p class="user-name">Demo User</p>
@@ -29,7 +92,7 @@
             </div>
 
             <a class="notification-bell" href="@Url.Action("Notifications", "Home")">
-                <i class="bi bi-bell"></i>
+                <i class="bi bi-bell" style="font-size: 27 px;"></i>
                 @if (TempData["NotificationCount"] != null)
                 {
                     <span class="badge badge-danger notification-badge">@TempData["NotificationCount"]</span>
@@ -37,11 +100,13 @@
             </a>
         </nav>
 
+        <!-- Nội dung chính -->
         <div class="main-content">
             @RenderBody()
         </div>
 
-        <nav class="navbar navbar-light bg-light border-top fixed-bottom-nav">
+        <!-- Thanh điều hướng dưới -->
+        <nav class="navbar navbar-light border-top fixed-bottom-nav">
             <a class="nav-item nav-link d-flex flex-column align-items-center @(ViewBag.Title == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">
                 <i class="bi bi-house"></i>
                 <span class="nav-label">Home</span>

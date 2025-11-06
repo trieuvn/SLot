@@ -149,6 +149,7 @@
     <Content Include="Content\img\bai3.jpg" />
     <Content Include="Content\img\bai4.jpg" />
     <Content Include="Content\img\bai5.jpg" />
+    <Content Include="Content\img\cardATM.png" />
     <Content Include="Content\img\Money.png" />
     <Content Include="Content\img\wallet_nap_icon.svg" />
     <Content Include="Content\img\wallet_rut_icon.svg" />
@@ -191,6 +192,7 @@
     <Content Include="Views\Home\LockedFeature.cshtml" />
     <Content Include="Views\Home\History.cshtml" />
     <Content Include="Views\Home\Wallet.cshtml" />
+    <Content Include="Views\Home\Language.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

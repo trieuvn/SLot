@@ -1,7 +1,9 @@
 ﻿using SLot.Models; // Thêm model
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -91,7 +93,11 @@ namespace SLot.Controllers
             var user = GetDemoUser();
             return View(user);
         }
-
+        public ActionResult Language()
+        {
+            return View();
+        }
+        
         // View Đặt chỗ trước [cite: 10]
         public ActionResult Booking()
         {
@@ -108,21 +114,38 @@ namespace SLot.Controllers
         // Trong HomeController.cs
         public ActionResult Wallet()
         {
+            // Giả lập dữ liệu — bạn có thể thay bằng dữ liệu từ DB
+            var transactions = new List<Transaction>
+    {
+        new Transaction
+        {
+            Type = "Nạp tiền vào Ví",
+            Amount = 500000,
+            DateTime = "16:24 - 15/08/2023",
+        },
+        new Transaction
+        {
+            Type = "Thanh toán bãi đỗ xe",
+            Amount = -100000,
+            DateTime = "10:12 - 20/08/2023",
+        },
+        new Transaction
+        {
+            Type = "Nhận hoàn tiền",
+            Amount = 100000,
+            DateTime = "18:45 - 22/08/2023",
+        }
+    };
+
             var model = new WalletViewModel
             {
-                Balance = 50000,
-                Transactions = new List<Transaction>
-        {
-            new Transaction
-            {
-                Type = "Nạp tiền vào Ví",
-                Amount = 50000,
-                DateTime = "16:24 - 15/08/2023",
-            }
-        }
+                Balance = transactions.Sum(t => t.Amount),
+                Transactions = transactions
             };
+
             return View(model);
         }
+
 
         // Dẫn đến view khóa 
         public ActionResult History()

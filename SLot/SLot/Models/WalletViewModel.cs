@@ -15,6 +15,5 @@ namespace SLot.Models
         public string Type { get; set; } // "Nạp tiền vào Ví", "Rút tiền",...
         public decimal Amount { get; set; }
         public string DateTime { get; set; }
-        public string Icon { get; set; } // Icon hoặc class
     }
 }
