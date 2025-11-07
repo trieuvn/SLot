@@ -14,5 +14,8 @@ namespace SLot.Models
         public string ImageUrl { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        // --- MỚI: Thêm thuộc tính này ---
+        public bool IsFull { get; set; }
     }
 }

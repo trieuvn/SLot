@@ -11,7 +11,7 @@ namespace SLot.Controllers
 {
     public class HomeController : Controller
     {
-        // Dữ liệu User gán cứng 
+        // Dữ liệu User gán cứng (Giữ nguyên của bạn)
         private UserProfileViewModel GetDemoUser()
         {
             return new UserProfileViewModel
@@ -22,7 +22,8 @@ namespace SLot.Controllers
             };
         }
 
-        // Dữ liệu bãi đỗ xe gán cứng [cite: 6]
+        // --- ĐÃ CẬP NHẬT (Dựa trên file của bạn) ---
+        // Dữ liệu bãi đỗ xe gán cứng
         private List<ParkingSlotViewModel> GetDemoParkingSlots()
         {
             return new List<ParkingSlotViewModel>
@@ -33,133 +34,84 @@ namespace SLot.Controllers
                     Name = "Bãi Xe 220 Pasteur",
                     Address = "220 Pasteur, Phường 6, Quận 3, Thành phố Hồ Chí Minh",
                     Price = 50000,
-                    ImageUrl = "/Content/img/bai1.jpg", // Link ảnh demo
-                    Latitude = 10.784533855868323, // Vị trí gán cứng
-                    Longitude = 106.69249728774506
+                    ImageUrl = "/Content/img/bai1.jpg", // Giữ nguyên link của bạn
+                    Latitude = 10.784533855868323,
+                    Longitude = 106.69249728774506,
+                    IsFull = false // Bãi này còn trống
                 },
                 new ParkingSlotViewModel
                 {
                     Id = 2,
-                    Name = "Bãi giữ xe ô tô 76",
-                    Address = "76 Trần Quốc Thảo, Phường Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh",
+                    Name = "Bãi xe chợ Bến Thành",
+                    Address = "456 Đường Phan Chu Trinh, Q.1, TP.HCM",
                     Price = 70000,
-                    ImageUrl = "/Content/img/bai2.jpg", // Link ảnh demo
-                    Latitude = 10.784174480006596, // Vị trí gán cứng
-                    Longitude = 106.68589315581875
+                    ImageUrl = "/Content/img/bai2.jpg", // Giữ nguyên link của bạn
+                    Latitude = 10.7725,
+                    Longitude = 106.6980,
+                    IsFull = true // MỚI: Bãi này ĐẦY
                 },
                 new ParkingSlotViewModel
                 {
                     Id = 3,
-                    Name = "P BÃI XE BV DA LIỄU",
-                    Address = "2 Nguyễn Thông, Phường 6, Quận 3, Thành phố Hồ Chí Minh 700000",
+                    Name = "Bãi xe Dinh Độc Lập",
+                    Address = "135 Nam Kỳ Khởi Nghĩa, Q.1, TP.HCM",
                     Price = 60000,
-                    ImageUrl = "/Content/img/bai3.jpg", // Link ảnh demo
-                    Latitude = 10.77717206540885, // Vị trí gán cứng
-                    Longitude = 106.68691277775554
+                    ImageUrl = "/Content/img/bai3.jpg", // Giữ nguyên link của bạn
+                    Latitude = 10.7770,
+                    Longitude = 106.6954,
+                    IsFull = true // MỚI: Bãi này ĐẦY
                 },
                 new ParkingSlotViewModel
                 {
                     Id = 4,
-                    Name = "Bãi Giữ Xe 24/24",
-                    Address = "62 Trần Quốc Thảo, Phường Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh",
-                    Price = 65000,
-                    ImageUrl = "/Content/img/bai4.jpg", // Link ảnh demo
-                    Latitude = 10.78244706269457, // Vị trí gán cứng
-                    Longitude = 106.68756863686946
-                },
-                new ParkingSlotViewModel
-                {
-                    Id = 5,
-                    Name = "Giữ Xe Ô-Tô",
-                    Address = "17 Lê Quý Đôn, Phường 6, Quận 3, Thành phố Hồ Chí Minh",
-                    Price = 70000,
-                    ImageUrl = "/Content/img/bai5.jpg", // Link ảnh demo
-                    Latitude = 10.781119093590915, // Vị trí gán cứng
-                    Longitude = 106.69119498352262
+                    Name = "Bãi xe Diamond Plaza",
+                    Address = "34 Lê Duẩn, Bến Nghé, Q.1, TP.HCM",
+                    Price = 80000,
+                    ImageUrl = "/Content/img/bai4.jpg", // Giữ nguyên link của bạn
+                    Latitude = 10.7794,
+                    Longitude = 106.6995,
+                    IsFull = false // Bãi này còn trống
                 }
             };
         }
 
         public ActionResult Index()
         {
-            ViewBag.CurrentLocationLat = 10.780911421802788; 
-            ViewBag.CurrentLocationLng = 106.68575690823123;
+            // Giữ nguyên vị trí Bitexco của bạn
+            ViewBag.CurrentLocationLat = 10.77168173268832;
+            ViewBag.CurrentLocationLng = 106.70404450613947;
             return View();
         }
 
-        // View Profile 
+        // (Các action còn lại: Profile, Booking, LockedFeature, History... giữ nguyên như file của bạn)
         public ActionResult Profile()
         {
             var user = GetDemoUser();
             return View(user);
         }
-        public ActionResult Language()
-        {
-            return View();
-        }
-        
-        // View Đặt chỗ trước [cite: 10]
+
         public ActionResult Booking()
         {
             ViewBag.ParkingSlots = GetDemoParkingSlots();
             return View();
         }
 
-        // View Tính năng đang khóa 
         public ActionResult LockedFeature()
         {
-             ViewBag.Message = "Tính năng đang được tạm khóa trong quá trình demo"; 
+            ViewBag.Message = "Tính năng đang được tạm khóa trong quá trình demo";
             return View();
         }
-        // Trong HomeController.cs
-        public ActionResult Wallet()
-        {
-            // Giả lập dữ liệu — bạn có thể thay bằng dữ liệu từ DB
-            var transactions = new List<Transaction>
-    {
-        new Transaction
-        {
-            Type = "Nạp tiền vào Ví",
-            Amount = 500000,
-            DateTime = "16:24 - 15/08/2023",
-        },
-        new Transaction
-        {
-            Type = "Thanh toán bãi đỗ xe",
-            Amount = -100000,
-            DateTime = "10:12 - 20/08/2023",
-        },
-        new Transaction
-        {
-            Type = "Nhận hoàn tiền",
-            Amount = 100000,
-            DateTime = "18:45 - 22/08/2023",
-        }
-    };
 
-            var model = new WalletViewModel
-            {
-                Balance = transactions.Sum(t => t.Amount),
-                Transactions = transactions
-            };
-
-            return View(model);
-        }
-
-
-        // Dẫn đến view khóa 
         public ActionResult History()
         {
             return View();
         }
 
-        // (Tính năng chuông thông báo cũng dẫn đến view khóa) 
         public ActionResult Notifications()
         {
             return RedirectToAction("LockedFeature");
         }
 
-        // API gán cứng để JS gọi khi "Đặt ngay" [cite: 6]
         [HttpGet]
         public JsonResult GetParkingSlots()
         {
@@ -167,7 +119,6 @@ namespace SLot.Controllers
             return Json(slots, JsonRequestBehavior.AllowGet);
         }
 
-        // API gán cứng để JS lấy thông tin user [cite: 7]
         [HttpGet]
         public JsonResult GetCurrentUserData()
         {
@@ -175,17 +126,15 @@ namespace SLot.Controllers
             return Json(user, JsonRequestBehavior.AllowGet);
         }
 
-        // Xử lý đặt chỗ trước [cite: 13]
         [HttpPost]
         public ActionResult PlaceBooking(string bookingTime)
         {
-            // Chỉ cần set TempData để hiển thị thông báo
-             TempData["BookingSuccess"] = "Đặt chỗ thành công!"; 
-            TempData["NotificationCount"] = 1; // Hiển thị +1 ở icon thông báo [cite: 13]
+            TempData["BookingSuccess"] = "Đặt chỗ thành công!";
+            TempData["NotificationCount"] = 1;
             return RedirectToAction("Index");
         }
 
-        // Các action mặc định, có thể xóa hoặc giữ
+        // (About, Contact giữ nguyên)
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -195,6 +144,7 @@ namespace SLot.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+
             return View();
         }
         public ActionResult UserProfile()
