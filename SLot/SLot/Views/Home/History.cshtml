@@ -1,0 +1,233 @@
+﻿@{
+    ViewBag.Title = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f6f9ff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .history-page {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .tab-container {
+        display: flex;
+        justify-content: center;
+        border-bottom: 2px solid #e2e6ef;
+        background-color: #fff;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 16px 0;
+        border: none;
+        background: none;
+        font-weight: 600;
+        color: #777;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .tab-btn.active {
+            color: #005ce6;
+            border-bottom: 3px solid #005ce6;
+            background-color: #f8fbff;
+        }
+
+    .order-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background-color: #f6f9ff;
+    }
+
+    .order-card {
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        transition: transform 0.2s ease;
+    }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+        }
+
+    .order-top {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .car-img {
+        width: 55px;
+        height: 55px;
+        flex-shrink: 0;
+        background: url('@Url.Content("~/Content/img/Car.png")') no-repeat center/contain;
+        margin-right: 15px;
+    }
+
+    .order-content {
+        flex: 1;
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-id {
+        font-weight: 700;
+        color: #222;
+        font-size: 15px;
+    }
+
+    .order-status {
+        font-weight: 600;
+        font-size: 10px;
+        padding: 4px 10px;
+        border-radius: 8px;
+    }
+
+    .status-running {
+        background: #e9f3ff;
+        color: #005ce6;
+    }
+
+    .status-done {
+        background: #e5f8eb;
+        color: #27a844;
+    }
+
+    .status-pending {
+        background: #f0f3f8;
+        color: #777;
+    }
+
+    .order-time {
+        font-size: 14px;
+        margin-top: 4px;
+        color: #444;
+    }
+
+    /* Gạch ngang ngăn cách địa chỉ */
+    .order-location {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e2e6ef;
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+    }
+
+        .order-location strong {
+            color: #222;
+        }
+
+    /* Thanh cuộn nhẹ */
+    .order-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .order-list::-webkit-scrollbar-thumb {
+        background-color: #cfd8e3;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="history-page">
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="showTab('current')">Đang diễn ra</button>
+        <button class="tab-btn" onclick="showTab('history')">Lịch sử</button>
+    </div>
+
+    <!-- Tab: Đang diễn ra -->
+    <div id="current-tab" class="order-list">
+        <div class="order-card">
+            <div class="order-top">
+                <div class="car-img"></div>
+                <div class="order-content">
+                    <div class="order-header">
+                        <div class="order-id">Mã đơn 70 - ABC123 45557</div>
+                        <span class="order-status status-running">Đang diễn ra</span>
+                    </div>
+                    <div class="order-time">17/08/2023 | 14:00 - 15:00</div>
+                </div>
+            </div>
+            <div class="order-location">
+                <strong>72 Đ. Lê Thánh Tôn, Bến Nghé, Quận 1</strong><br />
+                Bãi xe Vincom Quận 1: Tầng 1 - F1-C1
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: Lịch sử -->
+    <div id="history-tab" class="order-list" style="display: none;">
+        <div class="order-card">
+            <div class="order-top">
+                <div class="car-img"></div>
+                <div class="order-content">
+                    <div class="order-header">
+                        <div class="order-id">Mã đơn 67 - ABC123 45557</div>
+                        <span class="order-status status-pending">Chưa đánh giá</span>
+                    </div>
+                    <div class="order-time">17/08/2023 | 13:00 - 14:00</div>
+                </div>
+            </div>
+            <div class="order-location">
+                <strong>72 Đ. Lê Thánh Tôn, Bến Nghé, Quận 1</strong><br />
+                Bãi xe Vincom Quận 1: Tầng 1 - F1-C1
+            </div>
+        </div>
+
+        <div class="order-card">
+            <div class="order-top">
+                <div class="car-img"></div>
+                <div class="order-content">
+                    <div class="order-header">
+                        <div class="order-id">Mã đơn 65 - ABC123 45557</div>
+                        <span class="order-status status-done">Hoàn thành</span>
+                    </div>
+                    <div class="order-time">17/08/2023 | 12:00 - 13:00</div>
+                </div>
+            </div>
+            <div class="order-location">
+                <strong>72 Đ. Lê Thánh Tôn, Bến Nghé, Quận 1</strong><br />
+                Bãi xe Vincom Quận 1: Tầng 1 - F1-C1
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTab(tab) {
+        const current = document.getElementById("current-tab");
+        const history = document.getElementById("history-tab");
+        const buttons = document.querySelectorAll(".tab-btn");
+
+        if (tab === "current") {
+            current.style.display = "block";
+            history.style.display = "none";
+            buttons[0].classList.add("active");
+            buttons[1].classList.remove("active");
+        } else {
+            current.style.display = "none";
+            history.style.display = "block";
+            buttons[1].classList.add("active");
+            buttons[0].classList.remove("active");
+        }
+    }
+</script>

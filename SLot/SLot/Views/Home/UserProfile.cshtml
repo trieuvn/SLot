@@ -1,0 +1,323 @@
+﻿@model SLot.Models.UserProfileViewModel
+@{
+    ViewBag.Title = "User Profile";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewBag.Title</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --accent: #FFC107;
+            --light-border: #e5e7eb;
+            --card-bg: #f9fafb;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        .container-full {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+        }
+
+        /* === TOP BAR === */
+        .top-bar {
+            width: 100%;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--light-border);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+            .top-bar a {
+                color: var(--accent);
+                font-weight: 600;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+                .top-bar a:hover {
+                    text-decoration: underline;
+                }
+
+        .profile-card {
+            flex: 1;
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, grey);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            margin: 0 auto 10px;
+        }
+
+        h3 {
+            text-align: center;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        p.email {
+            text-align: center;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .balance {
+            background: white;
+            border: 1px solid var(--light-border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+            .balance .label {
+                font-size: 13px;
+                color: var(--muted);
+            }
+
+            .balance .amount {
+                font-size: 18px;
+                font-weight: 700;
+                color: black;
+            }
+
+        form.profile-form {
+            margin-top: 18px;
+        }
+
+        label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--light-border);
+            outline: none;
+            font-size: 15px;
+            background: #fff;
+            color: var(--text);
+        }
+
+        input[readonly] {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--light-border);
+            color: var(--muted);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+            .btn-outline:hover {
+                background-color: #f3f4f6;
+            }
+
+        .save-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .note {
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Sticky footer */
+        .footer-bar {
+            width: 100%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--light-border);
+            padding: 12px 0;
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-full">
+
+        <!-- Top Navigation -->
+        <div class="top-bar">
+            <a href="@Url.Action("Profile", "Home")"><i class="fa fa-user-circle"></i> Profile</a>
+            <a href="@Url.Action("Index", "Home")"><i class="fa fa-house"></i> Home</a>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="avatar">
+                <i class="fa fa-user"></i>
+            </div>
+            <h3 id="displayName">@Model.UserName</h3>
+            <p class="email" id="displayEmail">@Model.Email</p>
+
+            <div class="balance">
+                <span class="label">Số dư tài khoản</span><br>
+                <span class="amount">@Model.Balance.ToString("N0") VND</span>
+            </div>
+
+            <div class="top-actions">
+                <button id="editBtn" class="icon-btn" title="Chỉnh sửa"><i class="fa fa-pen"></i></button>
+                <button id="cancelBtn" class="icon-btn" title="Hủy" style="display:none;"><i class="fa fa-times"></i></button>
+            </div>
+
+            <form id="profileForm" method="post" action="@Url.Action("UpdateProfile", "Home")" class="profile-form">
+                <div class="mb-3">
+                    <label for="UserName">Tên hiển thị</label>
+                    <input id="UserName" name="UserName" type="text" value="@Model.UserName" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Email">Email</label>
+                    <input id="Email" name="Email" type="email" value="@Model.Email" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Balance">Balance</label>
+                    <input id="BalanceDisplay" type="text" value="@Model.Balance.ToString("N0") VND" readonly />
+                    <input type="hidden" name="Balance" value="@Model.Balance" />
+                </div>
+
+                <div class="save-row">
+                    <button type="button" id="saveBtn" class="btn btn-primary" style="display:none;">
+                        <i class="fa fa-floppy-disk me-2"></i> Lưu thay đổi
+                    </button>
+                </div>
+
+                @if (ViewBag.Message != null)
+                {
+                    <div class="mt-3 text-success text-center">@ViewBag.Message</div>
+                }
+            </form>
+
+            <div class="note">
+                Bấm <i class="fa fa-pen"></i> để chỉnh sửa tên, sau đó bấm <strong>Lưu thay đổi</strong>.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const editBtn = document.getElementById('editBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const nameInput = document.getElementById('UserName');
+            const displayName = document.getElementById('displayName');
+            const emailInput = document.getElementById('Email');
+
+            let originalName = nameInput.value;
+
+            editBtn.addEventListener('click', () => {
+                nameInput.readOnly = false;
+                nameInput.focus();
+                editBtn.style.display = 'none';
+                cancelBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'inline-block';
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                nameInput.value = originalName;
+                nameInput.readOnly = true;
+                editBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'none';
+                saveBtn.style.display = 'none';
+            });
+
+            saveBtn.addEventListener('click', () => {
+                const newName = nameInput.value.trim();
+                if (!newName) {
+                    alert('Tên không được để trống.');
+                    nameInput.focus();
+                    return;
+                }
+                document.getElementById('profileForm').submit();
+            });
+
+            emailInput.addEventListener('focus', () => emailInput.blur());
+        })();
+    </script>
+</body>
+</html>
